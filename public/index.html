@@ -70,19 +70,28 @@
 
     var markers = [
         {
-            "id": "АО \"ЧЦЗ\"",
-            "city": null,
-            "type": "Металлы, сплавы",
-            "address": "г. Челябинск, Свердловский тракт, д. 24",
-            "inn": "7448000013",
-            "coords": "55.205728, 61.38253",
-            "licence": false
-        }, {
             "id": "ООО \"МЕЧЕЛ-КОКС\"",
             "city": null,
             "type": "Твердое топливо, торф, кокс, уголь",
             "address": "г. Челябинск, ул. Павелецкая 2-я, д. 14",
             "inn": "7450043423",
+            "coords": "55.263845, 61.413118",
+            "licence": true
+        },
+        {
+            "id": "ООО \"КОМПАНИЯ РБТ\"",
+            "city": null,
+            "type": "Бытовая техника, часы",
+            "address": "г. Челябинск, ул. Производственная, д. 8Б, ОФИС 303 Лебедева",
+            "inn": "7452030451",
+            "coords": "55.204397, 61.346193",
+            "licence": false
+        },  {
+            "id": "ООО \"МЕЧЕЛ-ЭНЕРГО\"",
+            "city": null,
+            "type": "Электроэнергия",
+            "address": "г. Челябинск, ул. Павелецкая 2-я, д. 14",
+            "inn": "7722245108",
             "coords": "55.263845, 61.413118",
             "licence": false
         }, {
@@ -93,13 +102,103 @@
             "inn": "7451064592",
             "coords": "55.146708, 61.458887",
             "licence": false
+        }, {
+            "id": "ООО \"ГЕФЕСТ\"",
+            "city": null,
+            "type": "Металлолом, отходы металлические",
+            "address": "г. Челябинск, ул. Цинковая, д. 1, КОРПУС 2 ОФИС 324",
+            "inn": "7451407401",
+            "coords": "55.193962, 61.382207",
+            "licence": true
+        }, {
+            "id": "ООО \"ЭКОИНЖИНИРИНГ\"",
+            "city": null,
+            "type": "Электромонтажные работы",
+            "address": "г. Челябинск, пр-кт Ленина, д. 81, ОФИС 52",
+            "inn": "7453294249",
+            "coords": "55.159182, 61.373188",
+            "licence": false
+        }, {
+            "id": "ООО \"ЧЕЛИНДЛИЗИНГ\"",
+            "city": null,
+            "type": "Банковские и финансовые услуги, кредит",
+            "address": "г. Челябинск, ул. Красная, д. 11",
+            "inn": "7453101232",
+            "coords": "55.16558, 61.394442",
+            "licence": false
+        }, {
+            "id": "АО \"ЧЗМК\"",
+            "city": null,
+            "type": "Готовые металлоизделия и металлоконструкции",
+            "address": "г.Челябинск, ул.Новороссийская, д.46",
+            "inn": "7449010952",
+            "coords": "55.110285, 61.474814",
+            "licence": false
+        }, {
+            "id": "ПАО \"ЧТПЗ\"",
+            "city": null,
+            "type": "Металлопрокат",
+            "address": "г. Челябинск, ул. Машиностроителей, д. 21, кв. 21",
+            "inn": "7449006730",
+            "coords": "55.116495, 61.471185",
+            "licence": false
+        }, {
+            "id": "ООО \"НОВАТЭК- ЧЕЛЯБИНСК\"",
+            "city": null,
+            "type": "Топливо и Энергетика",
+            "address": "г. Челябинск, пр-кт Ленина, 42, А",
+            "inn": "7404056114",
+            "coords": "55.161152, 61.413262",
+            "licence": false
+        }, {
+            "id": "АО \"ЧЭМК\"",
+            "city": null,
+            "type": "Металлы, сплавы",
+            "address": "г. Челябинск, ул. Героев Танкограда, д. 80П, стр. 80",
+            "inn": "7447010227",
+            "coords": "55.180819, 61.44587",
+            "licence": false
+        }, {
+            "id": "ООО \"УРАЛЭНЕРГОСБЫТ\"",
+            "city": null,
+            "type": "Электроэнергия",
+            "address": "г. Челябинск, пр-кт Ленина, д. 28Д, ЭТ/ПОМ 6/7",
+            "inn": "7453313477",
+            "coords": "55.161404, 61.426557",
+            "licence": false
+        }, {
+            "id": "АО \"ЧЦЗ\"",
+            "city": null,
+            "type": "Металлы, сплавы",
+            "address": "г. Челябинск, Свердловский тракт, д. 24",
+            "inn": "7448000013",
+            "coords": "55.205728, 61.38253",
+            "licence": false
+        }, {
+            "id": "ООО \"СПЛАВ",
+            "city": null,
+            "type": "Услуги в розничной и оптовой торговле",
+            "address": "г. Челябинск, пр-кт Ленина, д. 81, ПОМ.15 ОФИС 2",
+            "inn": "7453297440",
+            "coords": "55.159182, 61.373188",
+            "licence": false
+        }, {
+            "id": "ООО \"ЦКС\"",
+            "city": null,
+            "type": "Защита окружающей среды",
+            "address": "г. Челябинск, ул. Маркса, д. 38, ОФИС 201",
+            "inn": "7456027298",
+            "coords": "55.165919, 61.411815",
+            "licence": false
         }];
 
     var globalMode = 0;
+
     function addMarkers(myMap) {
         for (let i = 0; i < markers.length; i++) {
             let coordinates = markers[i].coords.split(',');
-            if (myPolygon!== undefined && myPolygon.geometry.getCoordinates().length > 2) {
+            if (myPolygon !== undefined && myPolygon.geometry.getCoordinates().length > 2) {
+                alert(1);
                 if (!myPolygon.geometry.contains(coordinates)) {
                     continue;
                 }
@@ -126,35 +225,36 @@
 
     function loadObjects(mode) {
         let params = {
-                'coordinates': myPolygon.geometry.getCoordinates(),
+            'coordinates': myPolygon.geometry.getCoordinates(),
             'mode': mode
-            };
-        globalMode = mode;
-        myMap.geoObjects.removeAll();
-        addMarkers(myMap);
-        /*
+        };
+
         $.post(backendUrl, params, function (data, textStatus) {
                 let response = jQuery.parseJSON(data);
                 markers = response.markers;
+                globalMode = mode;
                 myMap.geoObjects.removeAll();
                 addMarkers(myMap);
             },
             'json');
-         */
     }
 
     function loadObjects0() {
         loadObjects(0);
     }
+
     function loadObjects1() {
         loadObjects(1);
     }
+
     function loadObjects2() {
         loadObjects(2);
     }
+
     function loadObjects3() {
         loadObjects(3);
     }
+
     function loadObjects4() {
         loadObjects(4);
     }
