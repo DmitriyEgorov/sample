@@ -1,17 +1,181 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+    <style>
+        #map {
+            widht: 100%;
+            height: 800px;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=en_RU&amp;apikey=5050011e-f8a4-4b8f-b989-98479f0acb4b"
+            type="text/javascript"></script>
+</head>
+<body>
+<noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+        Please enable it to continue.</strong>
+</noscript>
+<div id="app"></div>
+<script>
+    ymaps.ready(init);
+
+    var myMap;
+    var myPolygon;
+
+    function init() {
+        myMap = new ymaps.Map("map", {
+            center: [55.153365, 61.391702],
+            zoom: 10
+        }, {
+            searchControlProvider: 'yandex#search'
+        });
+
+        addMarkers(myMap);
+        // Creating a polygon with no vertices.
+        myPolygon = new ymaps.Polygon([], {}, {
+            // The cursor in the mode for adding new vertices.
+            editorDrawingCursor: "crosshair",
+            // The maximum number of vertices.
+            editorMaxPoints: 5,
+            // Fill color.
+            fillColor: '#00FF00',
+            // Stroke color.
+            strokeColor: '#0000FF',
+            // The stroke width.
+            strokeWidth: 5,
+            fillOpacity: 0.25,
+        });
+        // Adding the polygon to the map.
+        myMap.geoObjects.add(myPolygon);
+
+        // In the mode for adding new vertices, we change the stroke color of the polygon.
+        var stateMonitor = new ymaps.Monitor(myPolygon.editor.state);
+        stateMonitor.add("drawing", function (newValue) {
+            myPolygon.options.set("strokeColor", newValue ? '#FF0000' : '#0000FF');
+        });
+
+        // Turning on the edit mode with the possibility of adding new vertices.
+        myPolygon.editor.startDrawing();
+    }
+
+    function loadDanger() {
+        console.log(myPolygon.coordinates());
+    }
+
+    var markers = [
+        {
+            "id": "АО \"ЧЦЗ\"",
+            "city": null,
+            "type": "Металлы, сплавы",
+            "address": "г. Челябинск, Свердловский тракт, д. 24",
+            "inn": "7448000013",
+            "coords": "55.205728, 61.38253",
+            "licence": false
+        }, {
+            "id": "ООО \"МЕЧЕЛ-КОКС\"",
+            "city": null,
+            "type": "Твердое топливо, торф, кокс, уголь",
+            "address": "г. Челябинск, ул. Павелецкая 2-я, д. 14",
+            "inn": "7450043423",
+            "coords": "55.263845, 61.413118",
+            "licence": false
+        }, {
+            "id": "АО \"КОНАР\"",
+            "city": null,
+            "type": "Услуги металлообработки",
+            "address": "г. Челябинск, ул. Енисейская, д. 8, кв. 59",
+            "inn": "7451064592",
+            "coords": "55.146708, 61.458887",
+            "licence": false
+        }];
+
+    var globalMode = 0;
+    function addMarkers(myMap) {
+        for (let i = 0; i < markers.length; i++) {
+            let coordinates = markers[i].coords.split(',');
+            if (myPolygon!== undefined && myPolygon.geometry.getCoordinates().length > 2) {
+                if (!myPolygon.geometry.contains(coordinates)) {
+                    continue;
+                }
+            }
+            myMap.geoObjects.add(
+                new ymaps.Placemark(coordinates, {
+                    balloonContent: '<div><h1>' + markers[i].id + '</h1>'
+                        + '<p><strong>ИНН</strong>: ' + markers[i].inn + '</p>'
+                        + '<p><strong>Адрес</strong>: ' + markers[i].address + '</p>'
+                        + '<p><strong>Тип</strong>: ' + markers[i].type + '</p>',
+                    balloonHint: '<div><h1>' + markers[i].id + '</h1>'
+                        + '<p><strong>ИНН</strong>: ' + markers[i].inn + '</p>'
+                        + '<p><strong>Адрес</strong>: ' + markers[i].address + '</p>'
+                        + '<p><strong>Тип</strong>: ' + markers[i].type + '</p>'
+                }, {
+                    preset: 'islands#icon',
+                    iconColor: (markers[i].licence ? '#0095b6' : '#ff0000')
+                })
+            );
+        }
+    }
+
+    var backendUrl = '/data.json';
+
+    function loadObjects(mode) {
+        let params = {
+                'coordinates': myPolygon.geometry.getCoordinates(),
+            'mode': mode
+            };
+        globalMode = mode;
+        myMap.geoObjects.removeAll();
+        addMarkers(myMap);
+        /*
+        $.post(backendUrl, params, function (data, textStatus) {
+                let response = jQuery.parseJSON(data);
+                markers = response.markers;
+                myMap.geoObjects.removeAll();
+                addMarkers(myMap);
+            },
+            'json');
+         */
+    }
+
+    function loadObjects0() {
+        loadObjects(0);
+    }
+    function loadObjects1() {
+        loadObjects(1);
+    }
+    function loadObjects2() {
+        loadObjects(2);
+    }
+    function loadObjects3() {
+        loadObjects(3);
+    }
+    function loadObjects4() {
+        loadObjects(4);
+    }
+
+    $(document).ready(function () {
+        $('#loadDangerButton0').on('click', loadObjects0);
+    });
+    $(document).ready(function () {
+        $('#loadDangerButton1').on('click', loadObjects1);
+    });
+    $(document).ready(function () {
+        $('#loadDangerButton2').on('click', loadObjects2);
+    });
+    $(document).ready(function () {
+        $('#loadDangerButton3').on('click', loadObjects3);
+    });
+    $(document).ready(function () {
+        $('#loadDangerButton4').on('click', loadObjects4);
+    });
+
+</script>
+<!-- built files will be auto injected -->
+</body>
 </html>
